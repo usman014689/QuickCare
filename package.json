@@ -1,0 +1,27 @@
+{
+  "name": "quickcare",
+  "version": "1.0.0",
+  "description": "Quick Care is blood donating website in which the donor register himself as a volunteer and a person who needs a urgent blood can match their blood group and contact that person",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usman014689/QuickCare.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/usman014689/QuickCare/issues"
+  },
+  "homepage": "https://github.com/usman014689/QuickCare#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.2"
+  }
+}
