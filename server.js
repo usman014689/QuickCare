@@ -19,8 +19,20 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/health", (_req, res) => {
+  res.json({
+    status: "ok",
+    app: "quickcare",
+    db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
+});
+
 async function startServer() {
   try {
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI is missing. Copy .env.example to .env and set your Atlas URI.");
+    }
+
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("MongoDB connected successfully!");
 

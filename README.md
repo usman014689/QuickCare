@@ -1,2 +1,56 @@
 # QuickCare
-Quick Care is blood donating website in which the donor register himself as a volunteer and a person who needs a urgent blood can match their blood group and contact that person
+
+Blood donation web app for **B9IS130 – Web Development for Information Systems**.
+
+Donors register as volunteers; people who need blood can search by blood group (and location) and contact a compatible donor.
+
+## Stack (MERN)
+
+| Layer | Technology |
+|-------|------------|
+| Front end | React (Vite) |
+| Back end | Node.js + Express |
+| Database | MongoDB Atlas |
+| Auth | JWT + bcrypt (Phase 2) |
+| External API | OpenStreetMap Nominatim geocoding (Phase 4) |
+
+## Repository
+
+- `client/` — React SPA  
+- `server.js` — Express API entry (will grow into layered folders)  
+- `.env.example` — required environment variables  
+
+## Phased plan
+
+| Phase | Focus | Status |
+|-------|--------|--------|
+| **0** | Align repo, README, env example | In progress |
+| **1** | QuickCare app shell (replace Vite boilerplate) | Next |
+| **2** | Models, auth, donor/request CRUD, match API | Planned |
+| **3** | Frontend wired to API | Planned |
+| **4** | Geocoding, validation, security hardening | Planned |
+| **5** | Cloud deploy + polish | Planned |
+| **6** | Technical report + presentation | Planned |
+
+Work is done slowly — one sub-step at a time, with commits pushed to GitHub.
+
+## Local setup
+
+```bash
+# API
+cp .env.example .env   # set MONGODB_URI
+npm install
+npm run server
+
+# Client (separate terminal)
+cd client
+npm install
+npm run dev
+```
+
+## Submission targets
+
+1. GitHub repo with meaningful history  
+2. Deployed public URL  
+3. Technical report (≥2000 words, Harvard)  
+4. In-class demo (10–15 min)  
