@@ -6,6 +6,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+// Register models early so connection + routes share the same schemas
+require("./server/models");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
