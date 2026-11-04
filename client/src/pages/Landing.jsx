@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { roleHome } from '../utils/roleHome'
 
 export default function Landing() {
   const { user, logout } = useAuth()
@@ -17,7 +18,7 @@ export default function Landing() {
               <button type="button" className="btn btn-ghost" onClick={logout}>
                 Log out
               </button>
-              <Link className="btn btn-primary" to={user.role === 'donor' ? '/donor' : '/seeker'}>
+              <Link className="btn btn-primary" to={roleHome(user.role)}>
                 Dashboard
               </Link>
             </>

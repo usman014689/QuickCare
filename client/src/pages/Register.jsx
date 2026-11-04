@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { roleHome } from '../utils/roleHome'
 
 export default function Register() {
   const { register } = useAuth()
@@ -25,7 +26,7 @@ export default function Register() {
     setSubmitting(true)
     try {
       const user = await register({ name, email, phone, password, role })
-      navigate(user.role === 'donor' ? '/donor' : '/seeker')
+      navigate(roleHome(user.role))
     } catch (err) {
       setError(err.message || 'Registration failed')
     } finally {
