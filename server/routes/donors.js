@@ -2,6 +2,7 @@ const express = require("express");
 const {
   listDonors,
   getDonor,
+  getMyDonor,
   createDonor,
   updateDonor,
   patchAvailability,
@@ -19,6 +20,7 @@ function optionalProtect(req, res, next) {
 }
 
 router.get("/", listDonors);
+router.get("/me", protect, requireRole("donor"), getMyDonor);
 router.get("/:id", optionalProtect, getDonor);
 router.post("/", protect, requireRole("donor"), createDonor);
 router.put("/:id", protect, updateDonor);
