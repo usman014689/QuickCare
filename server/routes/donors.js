@@ -8,6 +8,7 @@ const {
   patchAvailability,
 } = require("../controllers/donorController");
 const { protect, requireRole } = require("../middleware/auth");
+const { validateDonorBody } = require("../middleware/validate");
 
 const router = express.Router();
 
@@ -22,8 +23,8 @@ function optionalProtect(req, res, next) {
 router.get("/", listDonors);
 router.get("/me", protect, requireRole("donor"), getMyDonor);
 router.get("/:id", optionalProtect, getDonor);
-router.post("/", protect, requireRole("donor"), createDonor);
-router.put("/:id", protect, updateDonor);
+router.post("/", protect, requireRole("donor"), validateDonorBody, createDonor);
+router.put("/:id", protect, validateDonorBody, updateDonor);
 router.patch("/:id/availability", protect, patchAvailability);
 
 module.exports = router;
