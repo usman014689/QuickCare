@@ -26,7 +26,7 @@ Donors register as volunteers; people who need blood can search by blood group (
 |-------|--------|--------|
 | **0** | Align repo, README, env example | Done |
 | **1** | QuickCare app shell (replace Vite boilerplate) | Done |
-| **2** | Models, auth, donor/request CRUD, match API | In progress (2a models) |
+| **2** | Models, auth, donor/request CRUD, match API | In progress (2b auth done) |
 | **3** | Frontend wired to API | Planned |
 | **4** | Geocoding, validation, security hardening | Planned |
 | **5** | Cloud deploy + polish | Planned |
