@@ -2,6 +2,7 @@ const express = require("express");
 const {
   listRequests,
   getRequest,
+  getMyRequests,
   createRequest,
   patchRequest,
 } = require("../controllers/requestController");
@@ -18,6 +19,7 @@ function optionalProtect(req, res, next) {
 }
 
 router.get("/", listRequests);
+router.get("/me", protect, requireRole("seeker"), getMyRequests);
 router.get("/:id", optionalProtect, getRequest);
 router.post("/", protect, requireRole("seeker"), createRequest);
 router.patch("/:id", protect, patchRequest);
