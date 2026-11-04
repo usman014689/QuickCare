@@ -63,6 +63,9 @@ export const api = {
   },
   matchRequests: (token) => request('/api/match/requests', { token }),
 
+  searchGeo: (token, q) =>
+    request(`/api/geo/search?q=${encodeURIComponent(q)}`, { token }),
+
   adminOverview: (token) => request('/api/admin/overview', { token }),
   adminDonors: (token) => request('/api/admin/donors', { token }),
   adminRequests: (token) => request('/api/admin/requests', { token }),
