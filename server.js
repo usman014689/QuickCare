@@ -11,15 +11,23 @@ require("./server/models");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+app.use(express.json({ limit: "100kb" }));
 
 app.use("/api/auth", require("./server/routes/auth"));
 app.use("/api/donors", require("./server/routes/donors"));
 app.use("/api/requests", require("./server/routes/requests"));
 app.use("/api/match", require("./server/routes/match"));
 app.use("/api/admin", require("./server/routes/admin"));
+app.use("/api/geo", require("./server/routes/geo"));
 
 app.get("/", (req, res) => {
   res.json({
@@ -40,6 +48,9 @@ async function startServer() {
   try {
     if (!process.env.MONGODB_URI) {
       throw new Error("MONGODB_URI is missing. Copy .env.example to .env and set your Atlas URI.");
+    }
+    if (!process.env.JWT_SECRET || process.env.JWT_SECRET === "change_me_before_deploy") {
+      console.warn("Warning: set a strong JWT_SECRET in .env before deploying.");
     }
 
     await mongoose.connect(process.env.MONGODB_URI);
