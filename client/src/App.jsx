@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import DonorDashboard from './pages/DonorDashboard'
 import PlaceholderDashboard from './pages/PlaceholderDashboard'
 import './App.css'
 
@@ -34,7 +35,7 @@ function AppRoutes() {
         path="/donor"
         element={
           <ProtectedRoute role="donor">
-            <PlaceholderDashboard role="donor" />
+            <DonorDashboard />
           </ProtectedRoute>
         }
       />
