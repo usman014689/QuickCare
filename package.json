@@ -4,6 +4,8 @@
   "description": "Quick Care is blood donating website in which the donor register himself as a volunteer and a person who needs a urgent blood can match their blood group and contact that person",
   "main": "index.js",
   "scripts": {
+    "server": "node server.js",
+    "dev": "node --watch server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
