@@ -18,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", require("./server/routes/auth"));
 app.use("/api/donors", require("./server/routes/donors"));
 app.use("/api/requests", require("./server/routes/requests"));
+app.use("/api/match", require("./server/routes/match"));
 
 app.get("/", (req, res) => {
   res.json({
