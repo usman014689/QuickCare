@@ -85,6 +85,25 @@ async function getDonor(req, res) {
   }
 }
 
+async function getMyDonor(req, res) {
+  try {
+    const donor = await DonorProfile.findOne({ user: req.user._id }).populate(
+      "user",
+      "name role email phone"
+    );
+
+    if (!donor) {
+      return res.status(404).json({ message: "Donor profile not found" });
+    }
+
+    return res.json({
+      donor: shapeDonor(donor, { includeContact: true }),
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to get your donor profile", detail: error.message });
+  }
+}
+
 async function createDonor(req, res) {
   try {
     const existing = await DonorProfile.findOne({ user: req.user._id });
@@ -207,6 +226,7 @@ async function patchAvailability(req, res) {
 module.exports = {
   listDonors,
   getDonor,
+  getMyDonor,
   createDonor,
   updateDonor,
   patchAvailability,
