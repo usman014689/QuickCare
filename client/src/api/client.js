@@ -34,6 +34,20 @@ export const api = {
   register: (payload) => request('/api/auth/register', { method: 'POST', body: payload }),
   login: (payload) => request('/api/auth/login', { method: 'POST', body: payload }),
   me: (token) => request('/api/auth/me', { token }),
+
+  getMyDonor: (token) => request('/api/donors/me', { token }),
+  createDonor: (token, payload) =>
+    request('/api/donors', { method: 'POST', token, body: payload }),
+  updateDonor: (token, id, payload) =>
+    request(`/api/donors/${id}`, { method: 'PUT', token, body: payload }),
+  patchDonorAvailability: (token, id, isAvailable) =>
+    request(`/api/donors/${id}/availability`, {
+      method: 'PATCH',
+      token,
+      body: { isAvailable },
+    }),
+
+  matchRequests: (token) => request('/api/match/requests', { token }),
 }
 
 export { API_BASE }
