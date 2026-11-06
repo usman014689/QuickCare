@@ -92,6 +92,20 @@ async function getRequest(req, res) {
   }
 }
 
+async function getMyRequests(req, res) {
+  try {
+    const requests = await BloodRequest.find({ seeker: req.user._id })
+      .populate("seeker", "name role email phone")
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      requests: requests.map((r) => shapeRequest(r, { includeContact: true })),
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to list your requests", detail: error.message });
+  }
+}
+
 async function createRequest(req, res) {
   try {
     const {
@@ -202,6 +216,7 @@ async function patchRequest(req, res) {
 module.exports = {
   listRequests,
   getRequest,
+  getMyRequests,
   createRequest,
   patchRequest,
 };
