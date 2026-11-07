@@ -36,6 +36,7 @@ export const api = {
   me: (token) => request('/api/auth/me', { token }),
 
   getMyDonor: (token) => request('/api/donors/me', { token }),
+  getDonor: (token, id) => request(`/api/donors/${id}`, { token }),
   createDonor: (token, payload) =>
     request('/api/donors', { method: 'POST', token, body: payload }),
   updateDonor: (token, id, payload) =>
@@ -47,7 +48,28 @@ export const api = {
       body: { isAvailable },
     }),
 
+  getMyRequests: (token) => request('/api/requests/me', { token }),
+  createRequest: (token, payload) =>
+    request('/api/requests', { method: 'POST', token, body: payload }),
+  patchRequest: (token, id, payload) =>
+    request(`/api/requests/${id}`, { method: 'PATCH', token, body: payload }),
+
+  matchDonors: (token, { bloodGroup, city } = {}) => {
+    const params = new URLSearchParams()
+    if (bloodGroup) params.set('bloodGroup', bloodGroup)
+    if (city) params.set('city', city)
+    const query = params.toString()
+    return request(`/api/match/donors${query ? `?${query}` : ''}`, { token })
+  },
   matchRequests: (token) => request('/api/match/requests', { token }),
+
+  adminOverview: (token) => request('/api/admin/overview', { token }),
+  adminDonors: (token) => request('/api/admin/donors', { token }),
+  adminRequests: (token) => request('/api/admin/requests', { token }),
+  adminDeactivateDonor: (token, id) =>
+    request(`/api/admin/donors/${id}/deactivate`, { method: 'PATCH', token }),
+  adminCancelRequest: (token, id) =>
+    request(`/api/admin/requests/${id}/cancel`, { method: 'PATCH', token }),
 }
 
 export { API_BASE }
