@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { roleHome } from '../utils/roleHome'
 
 export default function Login() {
   const { login } = useAuth()
@@ -16,7 +17,7 @@ export default function Login() {
     setSubmitting(true)
     try {
       const user = await login(email, password)
-      navigate(user.role === 'donor' ? '/donor' : '/seeker')
+      navigate(roleHome(user.role))
     } catch (err) {
       setError(err.message || 'Login failed')
     } finally {

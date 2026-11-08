@@ -4,14 +4,20 @@ import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import DonorDashboard from './pages/DonorDashboard'
-import PlaceholderDashboard from './pages/PlaceholderDashboard'
+import SeekerDashboard from './pages/SeekerDashboard'
+import AdminDashboard from './pages/AdminDashboard'
+import { roleHome } from './utils/roleHome'
 import './App.css'
 
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth()
 
   if (loading) {
-    return <div className="page auth-page"><p className="auth-card">Loading…</p></div>
+    return (
+      <div className="page auth-page">
+        <p className="auth-card">Loading…</p>
+      </div>
+    )
   }
 
   if (!user) {
@@ -19,7 +25,7 @@ function ProtectedRoute({ children, role }) {
   }
 
   if (role && user.role !== role) {
-    return <Navigate to={user.role === 'donor' ? '/donor' : '/seeker'} replace />
+    return <Navigate to={roleHome(user.role)} replace />
   }
 
   return children
@@ -43,7 +49,15 @@ function AppRoutes() {
         path="/seeker"
         element={
           <ProtectedRoute role="seeker">
-            <PlaceholderDashboard role="seeker" />
+            <SeekerDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute role="admin">
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />
