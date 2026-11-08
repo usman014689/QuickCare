@@ -7,6 +7,7 @@ const {
   patchRequest,
 } = require("../controllers/requestController");
 const { protect, requireRole } = require("../middleware/auth");
+const { validateRequestBody } = require("../middleware/validate");
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ function optionalProtect(req, res, next) {
 router.get("/", listRequests);
 router.get("/me", protect, requireRole("seeker"), getMyRequests);
 router.get("/:id", optionalProtect, getRequest);
-router.post("/", protect, requireRole("seeker"), createRequest);
-router.patch("/:id", protect, patchRequest);
+router.post("/", protect, requireRole("seeker"), validateRequestBody, createRequest);
+router.patch("/:id", protect, validateRequestBody, patchRequest);
 
 module.exports = router;
