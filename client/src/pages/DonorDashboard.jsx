@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
+import LocationSearch from '../components/LocationSearch'
 import { useAuth } from '../context/AuthContext'
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
@@ -11,6 +12,8 @@ const emptyForm = {
   addressText: '',
   notes: '',
   isAvailable: true,
+  latitude: null,
+  longitude: null,
 }
 
 export default function DonorDashboard() {
@@ -48,6 +51,8 @@ export default function DonorDashboard() {
             addressText: donor.addressText || '',
             notes: donor.notes || '',
             isAvailable: donor.isAvailable,
+            latitude: donor.latitude ?? null,
+            longitude: donor.longitude ?? null,
           })
           const match = await api.matchRequests(token)
           if (!cancelled) setRequests(match.requests || [])
@@ -88,6 +93,8 @@ export default function DonorDashboard() {
         addressText: form.addressText.trim(),
         notes: form.notes.trim(),
         isAvailable: form.isAvailable,
+        latitude: form.latitude,
+        longitude: form.longitude,
       }
 
       const data = profile
@@ -160,6 +167,21 @@ export default function DonorDashboard() {
                   ))}
                 </select>
               </label>
+              <div>
+                <p className="field-label">Find location</p>
+                <LocationSearch
+                  placeholder="Search city or area"
+                  onSelect={(place) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      city: place.city || prev.city || place.displayName.split(',')[0],
+                      addressText: place.displayName,
+                      latitude: place.latitude,
+                      longitude: place.longitude,
+                    }))
+                  }}
+                />
+              </div>
               <label>
                 City
                 <input
@@ -181,6 +203,11 @@ export default function DonorDashboard() {
                   maxLength={250}
                 />
               </label>
+              {form.latitude != null && form.longitude != null ? (
+                <p className="auth-lead">
+                  Coords: {form.latitude.toFixed(5)}, {form.longitude.toFixed(5)}
+                </p>
+              ) : null}
               <label>
                 Notes
                 <textarea

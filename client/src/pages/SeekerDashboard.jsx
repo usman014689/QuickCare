@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
+import LocationSearch from '../components/LocationSearch'
 import { useAuth } from '../context/AuthContext'
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
@@ -12,6 +13,8 @@ const emptyRequest = {
   hospitalName: '',
   locationText: '',
   urgency: 'urgent',
+  latitude: null,
+  longitude: null,
 }
 
 export default function SeekerDashboard() {
@@ -64,10 +67,13 @@ export default function SeekerDashboard() {
     setMessage('')
     try {
       await api.createRequest(token, {
-        ...form,
+        bloodGroup: form.bloodGroup,
         unitsNeeded: Number(form.unitsNeeded),
         hospitalName: form.hospitalName.trim(),
         locationText: form.locationText.trim(),
+        urgency: form.urgency,
+        latitude: form.latitude,
+        longitude: form.longitude,
       })
       setMessage('Blood request created.')
       setForm(emptyRequest)
@@ -174,6 +180,21 @@ export default function SeekerDashboard() {
                 required
               />
             </label>
+            <div>
+              <p className="field-label">Find hospital / area</p>
+              <LocationSearch
+                placeholder="Search hospital or area"
+                onSelect={(place) => {
+                  setForm((prev) => ({
+                    ...prev,
+                    hospitalName: prev.hospitalName || place.displayName.split(',')[0],
+                    locationText: place.displayName,
+                    latitude: place.latitude,
+                    longitude: place.longitude,
+                  }))
+                }}
+              />
+            </div>
             <label>
               Hospital
               <input
@@ -194,6 +215,11 @@ export default function SeekerDashboard() {
                 required
               />
             </label>
+            {form.latitude != null && form.longitude != null ? (
+              <p className="auth-lead">
+                Coords: {Number(form.latitude).toFixed(5)}, {Number(form.longitude).toFixed(5)}
+              </p>
+            ) : null}
             <label>
               Urgency
               <select name="urgency" value={form.urgency} onChange={onChange}>
