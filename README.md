@@ -31,7 +31,7 @@ Donors register as volunteers; people who need blood can search by blood group (
 | **2** | Models, auth, CRUD, match API | Done |
 | **3** | Frontend wired to API | Done |
 | **4** | Geocoding, validation, security hardening | Done |
-| **5** | Cloud deploy + polish | Next |
+| **5** | Cloud deploy + polish | In progress (configs added — see DEPLOY.md) |
 | **6** | Technical report + presentation | Planned |
 
 ## Local setup
@@ -77,6 +77,22 @@ Atlas: allow your current IP under Network Access.
 - Donor/seeker contact hidden from anonymous users  
 - CORS limited to `CLIENT_URL`  
 - Secrets only in `.env` (never commit)
+
+## Deployment (Phase 5)
+
+Production target: **Vercel** (client) + **Render** (API) + **MongoDB Atlas** (DB). Both hosts
+connect to this GitHub repo and auto-deploy on push to `main`.
+
+See **[DEPLOY.md](./DEPLOY.md)** for the full step-by-step guide (env vars, CORS, smoke test).
+
+Quick env map:
+
+| Where | Var | Value |
+|-------|-----|-------|
+| Render (API) | `MONGODB_URI` | Atlas connection string |
+| Render (API) | `JWT_SECRET` | strong random string |
+| Render (API) | `CLIENT_URL` | your Vercel URL |
+| Vercel (client) | `VITE_API_URL` | your Render API URL |
 
 ## Submission targets
 

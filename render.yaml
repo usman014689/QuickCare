@@ -1,0 +1,25 @@
+# Render Blueprint for the QuickCare API (Phase 5a)
+#
+# On Render: New -> Blueprint -> connect usman014689/QuickCare.
+# Render reads this file and creates the `quickcare-api` web service.
+# The secret env vars (MONGODB_URI, JWT_SECRET, CLIENT_URL) are NOT stored here —
+# set them in the Render dashboard after the service is created.
+services:
+  - type: web
+    name: quickcare-api
+    runtime: node
+    plan: free
+    rootDir: .
+    buildCommand: npm install
+    startCommand: npm run server
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false # set in Render dashboard (Atlas connection string)
+      - key: JWT_SECRET
+        sync: false # set in Render dashboard (strong random string)
+      - key: CLIENT_URL
+        sync: false # set in Render dashboard (your Vercel client URL)
