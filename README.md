@@ -11,13 +11,15 @@ Donors register as volunteers; people who need blood can search by blood group (
 | Front end | React (Vite) |
 | Back end | Node.js + Express |
 | Database | MongoDB Atlas |
-| Auth | JWT + bcrypt (Phase 2) |
-| External API | OpenStreetMap Nominatim geocoding (Phase 4) |
+| Auth | JWT + bcrypt |
+| External API | OpenStreetMap Nominatim geocoding (server proxy) |
 
 ## Repository
 
 - `client/` — React SPA  
-- `server.js` — Express API entry (will grow into layered folders)  
+- `server/` — models, routes, controllers, middleware, utils  
+- `server.js` — Express entry  
+- `scripts/createAdmin.js` — bootstrap an admin user  
 - `.env.example` — required environment variables  
 
 ## Phased plan
@@ -25,28 +27,56 @@ Donors register as volunteers; people who need blood can search by blood group (
 | Phase | Focus | Status |
 |-------|--------|--------|
 | **0** | Align repo, README, env example | Done |
-| **1** | QuickCare app shell (replace Vite boilerplate) | Done |
-| **2** | Models, auth, donor/request CRUD, match API | In progress (2b auth done) |
-| **3** | Frontend wired to API | Planned |
-| **4** | Geocoding, validation, security hardening | Planned |
-| **5** | Cloud deploy + polish | Planned |
+| **1** | QuickCare app shell | Done |
+| **2** | Models, auth, CRUD, match API | Done |
+| **3** | Frontend wired to API | Done |
+| **4** | Geocoding, validation, security hardening | Done |
+| **5** | Cloud deploy + polish | Next |
 | **6** | Technical report + presentation | Planned |
-
-Work is done slowly — one sub-step at a time, with commits pushed to GitHub.
 
 ## Local setup
 
 ```bash
-# API
-cp .env.example .env   # set MONGODB_URI
+# 1) API env
+cp .env.example .env
+# Set MONGODB_URI, JWT_SECRET, CLIENT_URL=http://localhost:5173
+
+# 2) API
 npm install
 npm run server
 
-# Client (separate terminal)
+# 3) Optional admin user
+npm run create-admin
+# default: admin@quickcare.local / admin123
+
+# 4) Client (separate terminal)
 cd client
+cp .env.example .env   # optional; defaults to http://localhost:5000
 npm install
 npm run dev
 ```
+
+Atlas: allow your current IP under Network Access.
+
+## Main API routes
+
+| Area | Endpoints |
+|------|-----------|
+| Auth | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me` |
+| Donors | `GET/POST /api/donors`, `GET /api/donors/me`, `PUT /api/donors/:id` |
+| Requests | `GET/POST /api/requests`, `GET /api/requests/me`, `PATCH /api/requests/:id` |
+| Match | `GET /api/match/donors`, `GET /api/match/requests` |
+| Geo | `GET /api/geo/search?q=` (JWT required) |
+| Admin | `/api/admin/*` (admin role) |
+
+## Security notes
+
+- Passwords hashed with bcrypt  
+- JWT on protected routes; role checks on server  
+- Request validation middleware on auth/donor/request bodies  
+- Donor/seeker contact hidden from anonymous users  
+- CORS limited to `CLIENT_URL`  
+- Secrets only in `.env` (never commit)
 
 ## Submission targets
 
