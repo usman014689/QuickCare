@@ -92,9 +92,9 @@ export default function AdminDashboard() {
         <section className="dash-panel">
           <h1>Admin overview</h1>
           <p className="auth-lead">Moderate donors and blood requests.</p>
-          {error ? <p className="form-error">{error}</p> : null}
-          {message ? <p className="form-success">{message}</p> : null}
-          {loading ? <p>Loading…</p> : null}
+          {error ? <p className="form-error" role="alert">{error}</p> : null}
+          {message ? <p className="form-success" role="status">{message}</p> : null}
+          {loading ? <p className="auth-lead">Loading…</p> : null}
 
           {overview ? (
             <div className="stat-grid">
@@ -120,7 +120,12 @@ export default function AdminDashboard() {
 
         <section className="dash-panel">
           <h2>Donors</h2>
-          <ul className="match-list">
+          {loading ? (
+            <p className="auth-lead">Loading donors…</p>
+          ) : donors.length === 0 ? (
+            <p className="auth-lead">No donors yet.</p>
+          ) : (
+            <ul className="match-list">
             {donors.map((d) => (
               <li key={d.id} className="match-item">
                 <div>
@@ -147,11 +152,17 @@ export default function AdminDashboard() {
               </li>
             ))}
           </ul>
+          )}
         </section>
 
         <section className="dash-panel dash-span">
           <h2>Requests</h2>
-          <ul className="match-list">
+          {loading ? (
+            <p className="auth-lead">Loading requests…</p>
+          ) : requests.length === 0 ? (
+            <p className="auth-lead">No requests yet.</p>
+          ) : (
+            <ul className="match-list">
             {requests.map((r) => (
               <li key={r.id} className="match-item">
                 <div>
@@ -178,6 +189,7 @@ export default function AdminDashboard() {
               </li>
             ))}
           </ul>
+          )}
         </section>
       </main>
     </div>

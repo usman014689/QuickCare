@@ -152,8 +152,8 @@ export default function DonorDashboard() {
           </p>
 
           {loading ? <p>Loading…</p> : null}
-          {error ? <p className="form-error">{error}</p> : null}
-          {message ? <p className="form-success">{message}</p> : null}
+          {error ? <p className="form-error" role="alert">{error}</p> : null}
+          {message ? <p className="form-success" role="status">{message}</p> : null}
 
           {!loading ? (
             <form className="auth-form" onSubmit={onSave}>

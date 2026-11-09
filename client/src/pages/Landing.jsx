@@ -62,7 +62,7 @@ export default function Landing() {
         </div>
       </main>
 
-      <p className="footer-note">B9IS130 coursework · MERN stack in progress</p>
+      <p className="footer-note">B9IS130 coursework · MERN stack</p>
     </div>
   )
 }

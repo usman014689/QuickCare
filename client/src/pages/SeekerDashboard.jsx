@@ -154,8 +154,8 @@ export default function SeekerDashboard() {
         <section className="dash-panel">
           <h1>Create request</h1>
           <p className="auth-lead">Post an urgent need by blood group and hospital.</p>
-          {error ? <p className="form-error">{error}</p> : null}
-          {message ? <p className="form-success">{message}</p> : null}
+          {error ? <p className="form-error" role="alert">{error}</p> : null}
+          {message ? <p className="form-success" role="status">{message}</p> : null}
 
           <form className="auth-form" onSubmit={onCreate}>
             <label>
@@ -309,29 +309,35 @@ export default function SeekerDashboard() {
             </button>
           </form>
 
-          <ul className="match-list">
-            {matches.map((donor) => (
-              <li key={donor.id} className="match-item">
-                <div>
-                  <strong>
-                    {donor.user?.name || 'Donor'} · {donor.bloodGroup}
-                  </strong>
-                  <p>
-                    {donor.city}
-                    {donor.addressText ? ` — ${donor.addressText}` : ''}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  disabled={busy}
-                  onClick={() => openDonor(donor.id)}
-                >
-                  Contact
-                </button>
-              </li>
-            ))}
-          </ul>
+          {matches.length === 0 ? (
+            <p className="auth-lead">
+              {busy ? 'Searching…' : 'No donors shown yet — run a search above.'}
+            </p>
+          ) : (
+            <ul className="match-list">
+              {matches.map((donor) => (
+                <li key={donor.id} className="match-item">
+                  <div>
+                    <strong>
+                      {donor.user?.name || 'Donor'} · {donor.bloodGroup}
+                    </strong>
+                    <p>
+                      {donor.city}
+                      {donor.addressText ? ` — ${donor.addressText}` : ''}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    disabled={busy}
+                    onClick={() => openDonor(donor.id)}
+                  >
+                    Contact
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
 
           {selectedDonor ? (
             <div className="contact-box">
