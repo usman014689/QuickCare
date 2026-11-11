@@ -74,14 +74,4 @@ ADMIN_EMAIL=admin@quickcare.local ADMIN_PASSWORD=<strong> npm run create-admin
 - [ ] Log in as admin → overview + moderation works
 - [ ] Direct navigation to `/login` on the Vercel URL loads (SPA routing works)
 
-## Alternatives
 
-- **Railway** instead of Render: create a Node service from the repo, root = `.`,
-  build = `npm install`, start = `npm run server`, same env vars. (`render.yaml` is not used.)
-- **Netlify** instead of Vercel: root = `client`, build = `npm run build`, publish dir = `dist`,
-  add `client/public/_redirects` with the line `/*  /index.html  200`. Set `VITE_API_URL`.
-
-## Reminders
-
-- Never commit `.env`. Secrets live only in the hosting dashboards / Atlas.
-- Keep `docs/` local (it is gitignored — briefs and the private plan stay out of the repo).
