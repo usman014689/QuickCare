@@ -1,51 +1,57 @@
 async function searchGeo(req, res) {
+  const q = String(req.query.q || "").trim();
+
+  if (q.length < 2 || q.length > 200) {
+    return res.status(400).json({
+      message: "q must be 2 to 200 characters",
+    });
+  }
+
+  const url = new URL("https://photon.komoot.io/api/");
+  url.searchParams.set("q", q);
+  url.searchParams.set("limit", "5");
+  // Prefer results near Dublin while allowing international searches.
+  url.searchParams.set("lat", "53.3498");
+  url.searchParams.set("lon", "-6.2603");
+
   try {
-    const q = String(req.query.q || "").trim();
-    if (q.length < 2) {
-      return res.status(400).json({ message: "q must be at least 2 characters" });
-    }
-
-    if (q.length > 200) {
-      return res.status(400).json({ message: "q is too long" });
-    }
-
-    const url = new URL("https://nominatim.openstreetmap.org/search");
-    url.searchParams.set("q", q);
-    url.searchParams.set("format", "json");
-    url.searchParams.set("addressdetails", "1");
-    url.searchParams.set("limit", "5");
-
     const response = await fetch(url, {
-      headers: {
-        // Nominatim usage policy requires a valid identifying User-Agent
-        "User-Agent": "QuickCare/1.0 (B9IS130 coursework; contact: usman014689@gmail.com)",
-        Accept: "application/json",
-      },
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(6000),
     });
 
     if (!response.ok) {
-      return res.status(502).json({ message: "Geocoding service unavailable" });
+      return res.status(502).json({
+        message: "Geocoding service unavailable",
+      });
     }
 
-    const results = await response.json();
-    return res.json({
-      results: (results || []).map((item) => ({
-        displayName: item.display_name,
-        latitude: Number(item.lat),
-        longitude: Number(item.lon),
-        city:
-          item.address?.city ||
-          item.address?.town ||
-          item.address?.village ||
-          item.address?.state ||
-          "",
-      })),
+    const { features } = await response.json();
+    const results = features.slice(0, 5).map(({ geometry, properties }) => {
+      const [longitude, latitude] = geometry.coordinates;
+      const city =
+        properties.city || properties.district || properties.county || "";
+      const displayName = [
+        ...new Set(
+          [
+            properties.name,
+            properties.street,
+            city,
+            properties.state,
+            properties.country,
+          ].filter(Boolean)
+        ),
+      ].join(", ");
+
+      return { displayName, latitude, longitude, city };
     });
-  } catch (error) {
-    return res.status(500).json({ message: "Geocoding failed", detail: error.message });
+
+    return res.json({ results });
+  } catch {
+    return res.status(502).json({
+      message: "Geocoding service unavailable",
+    });
   }
 }
 
-module.exports = {
-  searchGeo,
-};
+module.exports = { searchGeo };
