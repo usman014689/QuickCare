@@ -157,6 +157,22 @@ export default function SeekerDashboard() {
           {error ? <p className="form-error" role="alert">{error}</p> : null}
           {message ? <p className="form-success" role="status">{message}</p> : null}
 
+          <div>
+            <p className="field-label">Find hospital / area</p>
+            <LocationSearch
+              placeholder="Search hospital or area"
+              onSelect={(place) => {
+                setForm((prev) => ({
+                  ...prev,
+                  hospitalName: prev.hospitalName || place.displayName.split(',')[0],
+                  locationText: place.displayName,
+                  latitude: place.latitude,
+                  longitude: place.longitude,
+                }))
+              }}
+            />
+          </div>
+
           <form className="auth-form" onSubmit={onCreate}>
             <label>
               Blood group needed
@@ -180,21 +196,6 @@ export default function SeekerDashboard() {
                 required
               />
             </label>
-            <div>
-              <p className="field-label">Find hospital / area</p>
-              <LocationSearch
-                placeholder="Search hospital or area"
-                onSelect={(place) => {
-                  setForm((prev) => ({
-                    ...prev,
-                    hospitalName: prev.hospitalName || place.displayName.split(',')[0],
-                    locationText: place.displayName,
-                    latitude: place.latitude,
-                    longitude: place.longitude,
-                  }))
-                }}
-              />
-            </div>
             <label>
               Hospital
               <input
